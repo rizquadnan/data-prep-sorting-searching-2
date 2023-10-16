@@ -33,64 +33,37 @@ bool check(string * arr, int n)
    return result;
 }
 
-// function to swap elements
-void swap(string *a, string *b) {
-  string t = *a;
-  *a = *b;
-  *b = t;
-}
-
-// function to print the array
-void printArray(string array[], int size) {
-  int i;
-  for (i = 0; i < size; i++)
-    cout << array[i] << " ";
-  cout << endl;
-}
-
-// function to rearrange array (find the partition point)
-int partition(string array[], int low, int high) {
-    
-  // select the rightmost element as pivot
-  string pivot = array[high];
+void heapify(string arr[], int n, int i) {
+    // Find largest among root, left child and right child
+    int largest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
   
-  // pointer for greater element
-  int i = (low - 1);
-
-  // traverse each element of the array
-  // compare them with the pivot
-  for (int j = low; j < high; j++) {
-    if (array[j] <= pivot) {
-        
-      // if element smaller than pivot is found
-      // swap it with the greater element pointed by i
-      i++;
-      
-      // swap element at i with element at j
-      swap(&array[i], &array[j]);
+    if (left < n && arr[left] > arr[largest])
+      largest = left;
+  
+    if (right < n && arr[right] > arr[largest])
+      largest = right;
+  
+    // Swap and continue heapifying if root is not largest
+    if (largest != i) {
+      swap(arr[i], arr[largest]);
+      heapify(arr, n, largest);
     }
   }
   
-  // swap pivot with the greater element at i
-  swap(&array[i + 1], &array[high]);
-  
-  // return the partition point
-  return (i + 1);
-}
+// main function to do heap sort
+void heapSort(string arr[], int n) {
+  // Build max heap
+  for (int i = n / 2 - 1; i >= 0; i--)
+    heapify(arr, n, i);
 
-void quickSort(string array[], int low, int high) {
-  if (low < high) {
-      
-    // find the pivot element such that
-    // elements smaller than pivot are on left of pivot
-    // elements greater than pivot are on righ of pivot
-    int pi = partition(array, low, high);
+  // Heap sort
+  for (int i = n - 1; i >= 0; i--) {
+    swap(arr[0], arr[i]);
 
-    // recursive call on the left of pivot
-    quickSort(array, low, pi - 1);
-
-    // recursive call on the right of pivot
-    quickSort(array, pi + 1, high);
+    // Heapify root element to get highest element at root again
+    heapify(arr, i, 0);
   }
 }
 
@@ -122,7 +95,7 @@ void driver(string inFile)
     // sort UNSTA to SOSTA
     auto begin = chrono::high_resolution_clock::now();
 
-    quickSort(newArr, 0, arrSize - 1);
+    heapSort(newArr, arrSize);
 
     auto end = chrono::high_resolution_clock::now();
 

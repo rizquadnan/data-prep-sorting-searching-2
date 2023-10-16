@@ -1,3 +1,11 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <chrono>
+
+using namespace std;
+
 bool check(string * arr, int n)
 {
    int i, j;
@@ -53,4 +61,79 @@ void insertionSort(string * arr, int n)
         }
         arr[j + 1] = key;
     }
+}
+
+void driver(string inFile)
+{
+    string myText;
+    ifstream myReadFile(inFile);
+
+    vector<string> datas;
+    // put textfile data to vector
+    // this step should not be timed
+    while (getline(myReadFile, myText))
+    {
+        datas.push_back(myText);
+    }
+
+    myReadFile.close();
+
+    int arrSize = datas.size();
+    string* newArr = new string[arrSize];
+
+    // convert vector to array
+    // this step should not be timed
+    for (size_t looper = 0; looper < arrSize; looper++)
+    {
+        newArr[looper] = datas[looper];
+    }   
+
+    // sort UNSTA to SOSTA
+    auto begin = chrono::high_resolution_clock::now();
+
+    insertionSort(newArr, arrSize);
+
+    auto end = chrono::high_resolution_clock::now();
+
+    // checks if array is sorted
+    // this step should not be timed
+    bool checker = check(newArr, arrSize);            
+    if (checker)
+    {
+        cout << chrono::duration<double>(end - begin).count() << endl;
+    }
+    else
+    {
+        cout << "Something went wrong" << endl;
+        cout << chrono::duration<double>(end - begin).count() << endl;
+    }
+}
+
+int main()
+{
+    int numOfIterations = 1;
+
+    cout << "1k" << endl;
+    for (size_t i = 0; i < numOfIterations; i++)
+    {
+        driver("./datasets/1k.txt");
+    }
+
+    cout << "10k" << endl;
+    for (size_t i = 0; i < numOfIterations; i++)
+    {
+        driver("./datasets/10k.txt");
+    }
+
+    cout << "100k" << endl;
+    for (size_t i = 0; i < numOfIterations; i++)
+    {
+        driver("./datasets/100k.txt");
+    }
+
+    // cout << "1m" << endl;
+    // for (size_t i = 0; i < numOfIterations; i++)
+    // {
+    //     driver("./datasets/1m.txt");
+    // }
 }
