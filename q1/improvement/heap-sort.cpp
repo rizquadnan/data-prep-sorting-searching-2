@@ -200,9 +200,8 @@ void driver(string inFile)
         // cout << "" << endl;
     }
 
-    // fill in indexed sorting array
-    vector<refer> indexedSortingArray;
-
+    
+    // code to see reference array
     // for (size_t looper = 0; looper < referenceArraySize; looper++)
     // {
     //   if (referenceArray[looper].prefixCounter > 0)
@@ -221,11 +220,30 @@ void driver(string inFile)
     //   }
     // }
 
-    // int size = referenceArray[19543].stringValues.size();
-    // int counter = referenceArray[19543].prefixCounter;
-    // cout << "size: " << size << endl;
-    // cout << "counter: " << size << endl;
+    // fill in indexed sorting array
+    vector<refer> indexedSortingArray;
+    for (size_t looper = 0; looper < referenceArraySize; looper++)
+    {
+      if (referenceArray[looper].prefixCounter > 0)
+      {
+        indexedSortingArray.push_back(referenceArray[looper]);
+      }
+    }
 
+    // code to see indexed sorting array
+    // int isaSize = indexedSortingArray.size();
+    // for (size_t looper = 0; looper < isaSize; looper++)
+    // {
+    //   cout << "looper: " << looper << endl;
+    //   cout << "indexedSortingArray[looper].prefixCounter: " << indexedSortingArray[looper].prefixCounter << endl;
+    //   int size = indexedSortingArray[looper].stringValues.size();
+    //   cout << "indexedSortingArray[looper].size(): " << size << endl;
+    //   cout << "stringValues: " << endl;
+      
+    //   for (size_t looperIn = 0; looperIn < size; looperIn++) {
+    //     cout << "indexedSortingArray[looper].stringValues[looperIn]: " << indexedSortingArray[looper].stringValues[looperIn] << endl;
+    //   }
+    // }
 
     auto end1 = chrono::high_resolution_clock::now();
 
