@@ -49,7 +49,6 @@ int linearSearch(string* arr, string target, int begin, int end)
     return -1;
 }
 
-
 bool check(string * arr, int n)
 {
    int i, j;
