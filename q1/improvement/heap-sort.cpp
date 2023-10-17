@@ -67,8 +67,82 @@ void heapSort(string arr[], int n) {
   }
 }
 
+inline string& rtrim(string& s)
+{
+  const char* ws = " \t\n\r\f\v";
+
+    s.erase(s.find_last_not_of(ws) + 1);
+    return s;
+}
+
+// trim from beginning of string (left)
+inline string& ltrim(string& s)
+{
+  const char* ws = " \t\n\r\f\v";
+
+    s.erase(0, s.find_first_not_of(ws));
+    return s;
+}
+
+// trim from both ends of string (right then left)
+inline string& trim(string& s)
+{
+  const char* ws = " \t\n\r\f\v";
+
+  return ltrim(rtrim(s));
+}
+
+int table_based(string myText, int** tableBased)
+{
+    int myNumber = 1;
+    string safeText = trim(myText);
+
+    for (size_t i = 0; i < myText.length(); i++)
+    {
+        if (safeText[i] == '@') {
+            myNumber *= 1;
+        } else {
+            myNumber *= tableBased[i][safeText[i]];
+        }
+    }
+    return myNumber;
+}
+
 void driver(string inFile)
 {
+    // start initate code to convert string to number
+    int asciiSize = 128;
+    int* asciiIndex = new int [asciiSize];
+
+    for (size_t looper = 0; looper < asciiSize; looper++)
+    {
+        if (looper >= 64 && looper <= 90)
+        {
+            asciiIndex[looper] = looper - 63;
+        }
+        else if (looper >= 97 && looper <= 122)
+        {
+            asciiIndex[looper] = looper - 95;
+        }
+    }
+
+    int tableBasedSize = 6;
+    int** tableBased = new int* [tableBasedSize];
+
+    for (size_t looper = 0; looper < tableBasedSize; looper++)
+    {
+        tableBased[looper] = new int[asciiSize]{0};
+    }
+
+    for (size_t tabloop = 0; tabloop < tableBasedSize; tabloop++)
+    {
+        for (size_t looper = 0; looper < asciiSize; looper++)
+        {
+            tableBased[tabloop][looper] = asciiIndex[looper];
+        }
+    }
+    // end initate code to convert string to number
+
     string myText;
     ifstream myReadFile(inFile);
 
@@ -98,15 +172,18 @@ void driver(string inFile)
     string* referenceArray = new string[27 * 27 * 27]; // ie: Z * Z * Z
     string stringVal;
     string firstThree;
-    int stringNumber;
+    int firstThreeNumber;
 
     for (size_t looper = 0; looper < arrSize; looper++)
     {
         stringVal = newArr[looper];
         firstThree = stringVal.substr(0, 3);
-        // cout << "stringVal: " << stringVal << endl;
-        // cout << "firstThree: " << firstThree << endl;
-        // cout << "" << endl;
+        firstThreeNumber = table_based(firstThree, tableBased);
+
+        cout << "stringVal: " << stringVal << endl;
+        cout << "firstThree: " << firstThree << endl;
+        cout << "firstThreeNumber: " << firstThreeNumber << endl;
+        cout << "" << endl;
     }  
 
 
