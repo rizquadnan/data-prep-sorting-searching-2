@@ -406,15 +406,15 @@ int main()
         driver("../datasets/100k.txt");
     }
 
-    cout << "1m" << endl;
-    for (size_t i = 0; i < numOfIterations; i++)
-    {
-        driver("../datasets/1m.txt");
-    }
+    // cout << "1m" << endl;
+    // for (size_t i = 0; i < numOfIterations; i++)
+    // {
+    //     driver("../datasets/1m.txt");
+    // }
 
-    cout << "10m" << endl;
-    for (size_t i = 0; i < numOfIterations; i++)
-    {
-        driver("../datasets/10m.txt");
-    }
+    // cout << "10m" << endl;
+    // for (size_t i = 0; i < numOfIterations; i++)
+    // {
+    //     driver("../datasets/10m.txt");
+    // }
 }
