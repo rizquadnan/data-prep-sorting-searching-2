@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <chrono>
+#include <cmath>
 
 using namespace std;
 
@@ -72,6 +73,40 @@ void heapSort(string arr[], int n) {
   }
 }
 
+void heapifyDn(vector<string> arr, int n, int i) {
+    // Find largest among root, left child and right child
+    int largest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+  
+    if (left < n && arr[left] > arr[largest])
+      largest = left;
+  
+    if (right < n && arr[right] > arr[largest])
+      largest = right;
+  
+    // Swap and continue heapifying if root is not largest
+    if (largest != i) {
+      swap(arr[i], arr[largest]);
+      heapifyDn(arr, n, largest);
+    }
+  }
+  
+// main function to do heap sort
+void heapSortDn(vector<string> arr, int n) {
+  // Build max heap
+  for (int i = n / 2 - 1; i >= 0; i--)
+    heapifyDn(arr, n, i);
+
+  // Heap sort
+  for (int i = n - 1; i >= 0; i--) {
+    swap(arr[0], arr[i]);
+
+    // Heapify root element to get highest element at root again
+    heapifyDn(arr, i, 0);
+  }
+}
+
 inline string& rtrim(string& s)
 {
   const char* ws = " \t\n\r\f\v";
@@ -105,9 +140,9 @@ int table_based(string myText, int** tableBased)
     for (size_t i = 0; i < myText.length(); i++)
     {
         if (safeText[i] == '@') {
-            myNumber *= 1;
+            myNumber += 0;
         } else {
-            myNumber *= tableBased[i][safeText[i]];
+            myNumber += tableBased[i][safeText[i]] * pow(27, i + 1);
         }
     }
     return myNumber;
@@ -175,11 +210,11 @@ void driver(string inFile)
     auto begin1 = chrono::high_resolution_clock::now();
 
     // fill in reference array
-    int referenceArraySize = 27 * 27 * 27; // Z * Z * Z
-    refer referenceArray[referenceArraySize];
+    int referenceArraySize = pow(27, 2) + pow(27, 3) + pow(27, 4);
+    refer* referenceArray = new refer[referenceArraySize];
     string stringVal;
     string firstThree;
-    int firstThreeNumber;
+    int integerRepresentation;
 
     for (size_t looper = 0; looper < referenceArraySize; looper++)
     {
@@ -190,13 +225,13 @@ void driver(string inFile)
     {
         stringVal = newArr[looper];
         firstThree = stringVal.substr(0, 3);
-        firstThreeNumber = table_based(firstThree, tableBased);
+        integerRepresentation = table_based(firstThree, tableBased);
 
-        referenceArray[firstThreeNumber].prefixCounter += 1;
-        referenceArray[firstThreeNumber].stringValues.push_back(stringVal);
+        referenceArray[integerRepresentation].prefixCounter += 1;
+        referenceArray[integerRepresentation].stringValues.push_back(stringVal);
         // cout << "stringVal: " << stringVal << endl;
         // cout << "firstThree: " << firstThree << endl;
-        // cout << "firstThreeNumber: " << firstThreeNumber << endl;
+        // cout << "integerRepresentation: " << integerRepresentation << endl;
         // cout << "" << endl;
     }
 
@@ -243,21 +278,63 @@ void driver(string inFile)
     //   for (size_t looperIn = 0; looperIn < size; looperIn++) {
     //     cout << "indexedSortingArray[looper].stringValues[looperIn]: " << indexedSortingArray[looper].stringValues[looperIn] << endl;
     //   }
+
+    //   cout << "" << endl;
     // }
 
     auto end1 = chrono::high_resolution_clock::now();
 
 
-    // sort UNSTA to SOSTA
+    // start sorting
     auto begin2 = chrono::high_resolution_clock::now();
 
-    heapSort(newArr, arrSize);
+    int isaSize = indexedSortingArray.size();
+    for (size_t looper = 0; looper < isaSize; looper++)
+    {
+      heapSortDn(indexedSortingArray[looper].stringValues, indexedSortingArray[looper].stringValues.size());
+    } 
+
+    // code to see indexed sorting array
+    // for (size_t looper = 0; looper < isaSize; looper++)
+    // {
+    //   cout << "looper: " << looper << endl;
+    //   cout << "indexedSortingArray[looper].prefixCounter: " << indexedSortingArray[looper].prefixCounter << endl;
+    //   int size = indexedSortingArray[looper].stringValues.size();
+    //   cout << "indexedSortingArray[looper].size(): " << size << endl;
+    //   cout << "stringValues: " << endl;
+      
+    //   for (size_t looperIn = 0; looperIn < size; looperIn++) {
+    //     cout << "indexedSortingArray[looper].stringValues[looperIn]: " << indexedSortingArray[looper].stringValues[looperIn] << endl;
+    //   }
+    //   cout << "" << endl;
+    // }
+
+    // put sorted indexed sorting array back together
+    string* resultArr = new string[arrSize];
+    int fillInResultCounter = 0;
+    for (size_t looper = 0; looper < isaSize; looper++)
+    {
+      int size = indexedSortingArray[looper].stringValues.size();
+      for (size_t looperIn = 0; looperIn < size; looperIn++) {
+        resultArr[fillInResultCounter] = indexedSortingArray[looper].stringValues[looperIn];
+        fillInResultCounter += 1;
+      }
+    }
+
+    // code to see indexed sorting result
+    // for (size_t looper = 0; looper < arrSize; looper++) {
+    //   cout << "looper: " << looper << endl;
+    //   cout << "resultArr[looper]: " << resultArr[looper] << endl;
+    //   cout << "" << endl;
+    // }
+
+    heapSort(resultArr, arrSize);
 
     auto end2 = chrono::high_resolution_clock::now();
 
     // checks if array is sorted
     // this step should not be timed
-    bool checker = check(newArr, arrSize);            
+    bool checker = check(resultArr, arrSize);            
     if (checker)
     {
         cout << chrono::duration<double>(end2 - begin2).count() << endl;
@@ -279,27 +356,27 @@ int main()
         driver("../datasets/1k.txt");
     }
 
-    // cout << "10k" << endl;
-    // for (size_t i = 0; i < numOfIterations; i++)
-    // {
-    //     driver("../datasets/10k.txt");
-    // }
+    cout << "10k" << endl;
+    for (size_t i = 0; i < numOfIterations; i++)
+    {
+        driver("../datasets/10k.txt");
+    }
 
-    // cout << "100k" << endl;
-    // for (size_t i = 0; i < numOfIterations; i++)
-    // {
-    //     driver("../datasets/100k.txt");
-    // }
+    cout << "100k" << endl;
+    for (size_t i = 0; i < numOfIterations; i++)
+    {
+        driver("../datasets/100k.txt");
+    }
 
-    // cout << "1m" << endl;
-    // for (size_t i = 0; i < numOfIterations; i++)
-    // {
-    //     driver("../datasets/1m.txt");
-    // }
+    cout << "1m" << endl;
+    for (size_t i = 0; i < numOfIterations; i++)
+    {
+        driver("../datasets/1m.txt");
+    }
 
-    // cout << "10m" << endl;
-    // for (size_t i = 0; i < numOfIterations; i++)
-    // {
-    //     driver("../datasets/10m.txt");
-    // }
+    cout << "10m" << endl;
+    for (size_t i = 0; i < numOfIterations; i++)
+    {
+        driver("../datasets/10m.txt");
+    }
 }
