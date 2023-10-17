@@ -6,6 +6,11 @@
 
 using namespace std;
 
+struct refer {
+    int prefixCounter;
+    vector<string> stringValues;
+};
+
 bool check(string * arr, int n)
 {
    int i, j;
@@ -169,10 +174,17 @@ void driver(string inFile)
     // data prep start
     auto begin1 = chrono::high_resolution_clock::now();
 
-    string* referenceArray = new string[27 * 27 * 27]; // ie: Z * Z * Z
+    // fill in reference array
+    int referenceArraySize = 27 * 27 * 27; // Z * Z * Z
+    refer referenceArray[referenceArraySize];
     string stringVal;
     string firstThree;
     int firstThreeNumber;
+
+    for (size_t looper = 0; looper < referenceArraySize; looper++)
+    {
+      referenceArray[looper].prefixCounter = 0;
+    } 
 
     for (size_t looper = 0; looper < arrSize; looper++)
     {
@@ -180,11 +192,39 @@ void driver(string inFile)
         firstThree = stringVal.substr(0, 3);
         firstThreeNumber = table_based(firstThree, tableBased);
 
-        cout << "stringVal: " << stringVal << endl;
-        cout << "firstThree: " << firstThree << endl;
-        cout << "firstThreeNumber: " << firstThreeNumber << endl;
-        cout << "" << endl;
-    }  
+        referenceArray[firstThreeNumber].prefixCounter += 1;
+        referenceArray[firstThreeNumber].stringValues.push_back(stringVal);
+        // cout << "stringVal: " << stringVal << endl;
+        // cout << "firstThree: " << firstThree << endl;
+        // cout << "firstThreeNumber: " << firstThreeNumber << endl;
+        // cout << "" << endl;
+    }
+
+    // fill in indexed sorting array
+    vector<refer> indexedSortingArray;
+
+    // for (size_t looper = 0; looper < referenceArraySize; looper++)
+    // {
+    //   if (referenceArray[looper].prefixCounter > 0)
+    //   {
+    //     cout << "looper: " << looper << endl; 
+    //     cout << "referenceArray[looper].prefixCounter: " << referenceArray[looper].prefixCounter << endl;
+    //     int size = referenceArray[looper].stringValues.size();
+    //     cout << "referenceArray[looper].stringValues.size(): " << size << endl;
+    //     cout << "stringValues: " << endl;
+        
+    //     for (size_t looperIn = 0; looperIn < size; looperIn++) {
+    //       cout << "referenceArray[looper].stringValues[looperIn]: " << referenceArray[looper].stringValues[looperIn] << endl;
+    //     }
+
+    //     cout << "" << endl;
+    //   }
+    // }
+
+    // int size = referenceArray[19543].stringValues.size();
+    // int counter = referenceArray[19543].prefixCounter;
+    // cout << "size: " << size << endl;
+    // cout << "counter: " << size << endl;
 
 
     auto end1 = chrono::high_resolution_clock::now();
