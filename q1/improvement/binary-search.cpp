@@ -99,39 +99,26 @@ void heapSortDn(vector<string>& arr, int n) {
 }
 
 // An iterative binary search function.
-int binarySearchDn(vector<string> arr, string x, int n)
+int binarySearchDn(const vector<string>& arr, const string& x, int n)
 {
     int l = 0;
     int r = n - 1;
 
-    // Loop to implement Binary Search
     while (l <= r) {
-
-        // Calculatiing mid
         int m = l + (r - l) / 2;
 
-        // Some random value assigned
-        // as 0 belongs to index
-        int res = -1000;
-
-        if (x == (arr[m]))
-            res = 0;
-
-        // Check if x is present at mid
-        if (res == 0)
+        if (x == arr[m])
             return m;
 
-        // If x greater, ignore left half
-        if (x > (arr[m]))
+        if (x > arr[m])
             l = m + 1;
-
-        // If x is smaller, ignore right half
         else
             r = m - 1;
     }
 
     return -1;
 }
+
 
 int table_based(string myText, int** tableBased)
 {
@@ -354,23 +341,23 @@ int main()
 {
     int numOfIterations = 1;
 
-    // cout << "1k" << endl;
-    // for (size_t i = 0; i < numOfIterations; i++)
-    // {
-    //     driver("../datasets/1k.txt");
-    // }
+    cout << "1k" << endl;
+    for (size_t i = 0; i < numOfIterations; i++)
+    {
+        driver("../datasets/1k.txt");
+    }
 
-    // cout << "10k" << endl;
-    // for (size_t i = 0; i < numOfIterations; i++)
-    // {
-    //     driver("../datasets/10k.txt");
-    // }
+    cout << "10k" << endl;
+    for (size_t i = 0; i < numOfIterations; i++)
+    {
+        driver("../datasets/10k.txt");
+    }
 
-    // cout << "100k" << endl;
-    // for (size_t i = 0; i < numOfIterations; i++)
-    // {
-    //     driver("../datasets/100k.txt");
-    // }
+    cout << "100k" << endl;
+    for (size_t i = 0; i < numOfIterations; i++)
+    {
+        driver("../datasets/100k.txt");
+    }
 
     cout << "1m" << endl;
     for (size_t i = 0; i < numOfIterations; i++)
