@@ -1,3 +1,4 @@
+#include <bits/stdc++.h>
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -5,50 +6,41 @@
 #include <chrono>
 
 using namespace std;
-
-// trim from end of string (right)
-inline string& rtrim(string& s)
+ 
+// An iterative binary search function.
+int binarySearch(string arr[], string x, int n)
 {
-  const char* ws = " \t\n\r\f\v";
+    int l = 0;
+    int r = n - 1;
 
-    s.erase(s.find_last_not_of(ws) + 1);
-    return s;
-}
+    // Loop to implement Binary Search
+    while (l <= r) {
 
-// trim from beginning of string (left)
-inline string& ltrim(string& s)
-{
-  const char* ws = " \t\n\r\f\v";
+        // Calculatiing mid
+        int m = l + (r - l) / 2;
 
-    s.erase(0, s.find_first_not_of(ws));
-    return s;
-}
+        // Some random value assigned
+        // as 0 belongs to index
+        int res = -1000;
 
-// trim from both ends of string (right then left)
-inline string& trim(string& s)
-{
-  const char* ws = " \t\n\r\f\v";
+        if (x == (arr[m]))
+            res = 0;
 
-  return ltrim(rtrim(s));
-}
+        // Check if x is present at mid
+        if (res == 0)
+            return m;
 
-int linearSearch(string* arr, string target, int begin, int end)
-{
-    for (int i = begin; i <= end; i++) {
-        // cout << "i " << i << endl;
-        // cout << "arr[i] " << arr[i] << endl;
-        // cout << "target " << target << endl;
+        // If x greater, ignore left half
+        if (x > (arr[m]))
+            l = m + 1;
 
-        if (trim(arr[i]) == trim(target)) {
-            // cout << "KETEMUU" << endl;
-            return i;
-        }
-        // cout << "" << endl;
+        // If x is smaller, ignore right half
+        else
+            r = m - 1;
     }
 
     return -1;
 }
-
 
 bool check(string * arr, int n)
 {
@@ -180,7 +172,7 @@ void driver(string inFile)
     for (size_t looper = 0; looper < arrSize; looper++)
     {
       string searchTarget = newArr[looper];
-      int targetIndex = linearSearch(newArr, searchTarget, 0, arrSize - 1);
+      int targetIndex = binarySearch(newArr, searchTarget, arrSize);
       
       if (targetIndex == -1) {
         checker = false;
@@ -202,7 +194,6 @@ void driver(string inFile)
     }
 }
 
-
 int main()
 {
     int numOfIterations = 1;
@@ -210,24 +201,24 @@ int main()
     cout << "1k" << endl;
     for (size_t i = 0; i < numOfIterations; i++)
     {
-        driver("./datasets/1k.txt");
+        driver("../datasets/1k.txt");
     }
 
     cout << "10k" << endl;
     for (size_t i = 0; i < numOfIterations; i++)
     {
-        driver("./datasets/10k.txt");
+        driver("../datasets/10k.txt");
     }
 
     cout << "100k" << endl;
     for (size_t i = 0; i < numOfIterations; i++)
     {
-        driver("./datasets/100k.txt");
+        driver("../datasets/100k.txt");
     }
 
     cout << "1m" << endl;
     for (size_t i = 0; i < numOfIterations; i++)
     {
-        driver("./datasets/1m.txt");
+        driver("../datasets/1m.txt");
     }
 }

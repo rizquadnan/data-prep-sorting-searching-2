@@ -33,37 +33,35 @@ bool check(string * arr, int n)
    return result;
 }
 
-// function to swap the the position of two elements
-void swap(string *a, string *b) {
-  string temp = *a;
-  *a = *b;
-  *b = temp;
+void swap(string* xp, string* yp)
+{
+    string temp = *xp;
+    *xp = *yp;
+    *yp = temp;
 }
 
-// function to print an array
-void printArray(string array[], int size) {
-  for (int i = 0; i < size; i++) {
-    cout << array[i] << " ";
-  }
-  cout << endl;
-}
+void insertionSort(string * arr, int n)
+{
+    string key;
+    int i, j;
 
-void selectionSort(string array[], int size) {
-  for (int step = 0; step < size - 1; step++) {
-    int min_idx = step;
-    for (int i = step + 1; i < size; i++) {
-
-      // To sort in descending order, change > to < in this line.
-      // Select the minimum element in each loop.
-      if (array[i] < array[min_idx])
-        min_idx = i;
+    for (i = 1; i < n; i++)
+    {
+        key = arr[i];
+        j = i - 1;
+ 
+        // Move elements of arr[0..i-1], 
+        // that are greater than key, to one
+        // position ahead of their
+        // current position
+        while (j >= 0 && arr[j] > key)
+        {
+            arr[j + 1] = arr[j];
+            j = j - 1;
+        }
+        arr[j + 1] = key;
     }
-
-    // put min at the correct position
-    swap(&array[min_idx], &array[step]);
-  }
 }
-
 
 void driver(string inFile)
 {
@@ -93,7 +91,7 @@ void driver(string inFile)
     // sort UNSTA to SOSTA
     auto begin = chrono::high_resolution_clock::now();
 
-    selectionSort(newArr, arrSize);
+    insertionSort(newArr, arrSize);
 
     auto end = chrono::high_resolution_clock::now();
 
@@ -118,24 +116,24 @@ int main()
     cout << "1k" << endl;
     for (size_t i = 0; i < numOfIterations; i++)
     {
-        driver("./datasets/1k.txt");
+        driver("../datasets/1k.txt");
     }
 
     cout << "10k" << endl;
     for (size_t i = 0; i < numOfIterations; i++)
     {
-        driver("./datasets/10k.txt");
+        driver("../datasets/10k.txt");
     }
 
     cout << "100k" << endl;
     for (size_t i = 0; i < numOfIterations; i++)
     {
-        driver("./datasets/100k.txt");
+        driver("../datasets/100k.txt");
     }
 
     cout << "1m" << endl;
     for (size_t i = 0; i < numOfIterations; i++)
     {
-        driver("./datasets/1m.txt");
+        driver("../datasets/1m.txt");
     }
 }

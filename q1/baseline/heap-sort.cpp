@@ -33,26 +33,38 @@ bool check(string * arr, int n)
    return result;
 }
 
-void swap(string* xp, string* yp)
-{
-    string temp = *xp;
-    *xp = *yp;
-    *yp = temp;
-}
-
-void bubble_sort(string* arr, int* limit)
-{
-    int i, j;
-    for (i = 0; i < limit[1] - limit[0] - 1; i++)
-    {
-        for (j = limit[0]; j < limit[1] - i - 1; j++)
-        {
-            if (arr[j] > arr[j + 1])
-            {
-                swap(&arr[j], &arr[j + 1]);
-            }
-        }
+void heapify(string arr[], int n, int i) {
+    // Find largest among root, left child and right child
+    int largest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+  
+    if (left < n && arr[left] > arr[largest])
+      largest = left;
+  
+    if (right < n && arr[right] > arr[largest])
+      largest = right;
+  
+    // Swap and continue heapifying if root is not largest
+    if (largest != i) {
+      swap(arr[i], arr[largest]);
+      heapify(arr, n, largest);
     }
+  }
+  
+// main function to do heap sort
+void heapSort(string arr[], int n) {
+  // Build max heap
+  for (int i = n / 2 - 1; i >= 0; i--)
+    heapify(arr, n, i);
+
+  // Heap sort
+  for (int i = n - 1; i >= 0; i--) {
+    swap(arr[0], arr[i]);
+
+    // Heapify root element to get highest element at root again
+    heapify(arr, i, 0);
+  }
 }
 
 void driver(string inFile)
@@ -83,7 +95,7 @@ void driver(string inFile)
     // sort UNSTA to SOSTA
     auto begin = chrono::high_resolution_clock::now();
 
-    bubble_sort(newArr, arrSize);
+    heapSort(newArr, arrSize);
 
     auto end = chrono::high_resolution_clock::now();
 
@@ -108,24 +120,30 @@ int main()
     cout << "1k" << endl;
     for (size_t i = 0; i < numOfIterations; i++)
     {
-        driver("./datasets/1k.txt");
+        driver("../datasets/1k.txt");
     }
 
     cout << "10k" << endl;
     for (size_t i = 0; i < numOfIterations; i++)
     {
-        driver("./datasets/10k.txt");
+        driver("../datasets/10k.txt");
     }
 
     cout << "100k" << endl;
     for (size_t i = 0; i < numOfIterations; i++)
     {
-        driver("./datasets/100k.txt");
+        driver("../datasets/100k.txt");
     }
 
-    // cout << "1m" << endl;
-    // for (size_t i = 0; i < numOfIterations; i++)
-    // {
-    //     driver("./datasets/1m.txt");
-    // }
+    cout << "1m" << endl;
+    for (size_t i = 0; i < numOfIterations; i++)
+    {
+        driver("../datasets/1m.txt");
+    }
+
+    cout << "10m" << endl;
+    for (size_t i = 0; i < numOfIterations; i++)
+    {
+        driver("../datasets/10m.txt");
+    }
 }

@@ -147,30 +147,30 @@ int main()
     cout << "1k" << endl;
     for (size_t i = 0; i < numOfIterations; i++)
     {
-        driver("./datasets/1k.txt");
+        driver("../datasets/1k.txt");
     }
 
     cout << "10k" << endl;
     for (size_t i = 0; i < numOfIterations; i++)
     {
-        driver("./datasets/10k.txt");
+        driver("../datasets/10k.txt");
     }
 
     cout << "100k" << endl;
     for (size_t i = 0; i < numOfIterations; i++)
     {
-        driver("./datasets/100k.txt");
+        driver("../datasets/100k.txt");
     }
 
     cout << "1m" << endl;
     for (size_t i = 0; i < numOfIterations; i++)
     {
-        driver("./datasets/1m.txt");
+        driver("../datasets/1m.txt");
     }
 
     cout << "10m" << endl;
     for (size_t i = 0; i < numOfIterations; i++)
     {
-        driver("./datasets/10m.txt");
+        driver("../datasets/10m.txt");
     }
 }

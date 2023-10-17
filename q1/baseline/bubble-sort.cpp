@@ -40,26 +40,18 @@ void swap(string* xp, string* yp)
     *yp = temp;
 }
 
-void insertionSort(string * arr, int n)
+void bubble_sort(string* arr, int* limit)
 {
-    string key;
     int i, j;
-
-    for (i = 1; i < n; i++)
+    for (i = 0; i < limit[1] - limit[0] - 1; i++)
     {
-        key = arr[i];
-        j = i - 1;
- 
-        // Move elements of arr[0..i-1], 
-        // that are greater than key, to one
-        // position ahead of their
-        // current position
-        while (j >= 0 && arr[j] > key)
+        for (j = limit[0]; j < limit[1] - i - 1; j++)
         {
-            arr[j + 1] = arr[j];
-            j = j - 1;
+            if (arr[j] > arr[j + 1])
+            {
+                swap(&arr[j], &arr[j + 1]);
+            }
         }
-        arr[j + 1] = key;
     }
 }
 
@@ -91,7 +83,7 @@ void driver(string inFile)
     // sort UNSTA to SOSTA
     auto begin = chrono::high_resolution_clock::now();
 
-    insertionSort(newArr, arrSize);
+    bubble_sort(newArr, arrSize);
 
     auto end = chrono::high_resolution_clock::now();
 
@@ -116,24 +108,24 @@ int main()
     cout << "1k" << endl;
     for (size_t i = 0; i < numOfIterations; i++)
     {
-        driver("./datasets/1k.txt");
+        driver("../datasets/1k.txt");
     }
 
     cout << "10k" << endl;
     for (size_t i = 0; i < numOfIterations; i++)
     {
-        driver("./datasets/10k.txt");
+        driver("../datasets/10k.txt");
     }
 
     cout << "100k" << endl;
     for (size_t i = 0; i < numOfIterations; i++)
     {
-        driver("./datasets/100k.txt");
+        driver("../datasets/100k.txt");
     }
 
-    cout << "1m" << endl;
-    for (size_t i = 0; i < numOfIterations; i++)
-    {
-        driver("./datasets/1m.txt");
-    }
+    // cout << "1m" << endl;
+    // for (size_t i = 0; i < numOfIterations; i++)
+    // {
+    //     driver("../datasets/1m.txt");
+    // }
 }
