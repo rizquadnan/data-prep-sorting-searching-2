@@ -83,15 +83,15 @@ int linearSearchDn(vector<string> arr, string target, int begin, int end)
 
 int table_based(string myText, int** tableBased)
 {
-    int myNumber = 1;
+    int myNumber = 0;
     string safeText = trim(myText);
 
-    for (size_t i = 0; i < myText.length(); i++)
+    for (size_t i = 0; i < safeText.length(); i++)
     {
         if (safeText[i] == '@') {
             myNumber += 0;
         } else {
-            myNumber += tableBased[i][safeText[i]] * pow(27, i + 1);
+            myNumber += tableBased[i][safeText[i]] * pow(27, i);
         }
     }
     return myNumber;
@@ -159,7 +159,7 @@ void driver(string inFile)
     auto begin1 = chrono::high_resolution_clock::now();
 
     // fill in reference array
-    int referenceArraySize = pow(27, 2) + pow(27, 3) + pow(27, 4);
+    int referenceArraySize = pow(27, 1) + pow(27, 2) + pow(27, 3) + 1;
     refer* referenceArray = new refer[referenceArraySize];
     string stringVal;
     string firstThree;
@@ -175,13 +175,8 @@ void driver(string inFile)
         stringVal = newArr[looper];
         firstThree = stringVal.substr(0, 3);
         integerRepresentation = table_based(firstThree, tableBased);
-
         referenceArray[integerRepresentation].prefixCounter += 1;
         referenceArray[integerRepresentation].stringValues.push_back(stringVal);
-        // cout << "stringVal: " << stringVal << endl;
-        // cout << "firstThree: " << firstThree << endl;
-        // cout << "integerRepresentation: " << integerRepresentation << endl;
-        // cout << "" << endl;
     }
 
     
@@ -230,15 +225,6 @@ void driver(string inFile)
 
     //   cout << "" << endl;
     // }
-
-    // // sort this for binary search prep
-    // for (size_t looper = 0; looper < referenceArraySize; looper++)
-    // {
-    //   if (referenceArray[looper].prefixCounter > 0)
-    //   {
-    //     heapSortDn(&referenceArray[looper].stringValues, referenceArray[looper].stringValues.size() - 1);
-    //   }
-    // } 
 
     auto end1 = chrono::high_resolution_clock::now(); cout << "data prep only: " << chrono::duration<double>(end1 - begin1).count() << endl;
 
@@ -326,9 +312,9 @@ int main()
         driver("../datasets/1m.txt");
     }
 
-    cout << "10m" << endl;
-    for (size_t i = 0; i < numOfIterations; i++)
-    {
-        driver("../datasets/10m.txt");
-    }
+    // cout << "10m" << endl;
+    // for (size_t i = 0; i < numOfIterations; i++)
+    // {
+    //     driver("../datasets/10m.txt");
+    // }
 }
